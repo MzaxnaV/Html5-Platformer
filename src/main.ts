@@ -1,19 +1,19 @@
-import * as Phaser from 'phaser'
-import { version } from "../package.json"
-
-const config: Phaser.Types.Core.GameConfig = {
-    title: "Platformer",
-    type: Phaser.AUTO,
-    version: version,
-    render: {
-        pixelArt: true,
-    },
-    width: 1280,
-    height: 720,
-    backgroundColor: 0x202020,
-    scene: []
-}
+import * as Phaser from 'phaser';
+import { CFG } from './cfg';
+import { LoadScene } from './scenes/LoadScene';
+import { GameScene } from './scenes/GameScene';
 
 window.onload = () => {
-    new Phaser.Game();
+    new Phaser.Game({
+        title: CFG.GAME.TITLE,
+        type: Phaser.AUTO,
+        version: CFG.GAME.VERSION,
+        // render: {
+        //     pixelArt: true,
+        // },
+        width: CFG.GAME.WIDTH,
+        height: CFG.GAME.HEIGHT,
+        backgroundColor: 0x202020,
+        scene: [LoadScene, GameScene]
+    });
 }
