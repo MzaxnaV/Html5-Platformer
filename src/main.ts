@@ -11,9 +11,13 @@ window.onload = () => {
         // render: {
         //     pixelArt: true,
         // },
+        scale: {
+            // mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH
+        },
         width: CFG.GAME.WIDTH,
         height: CFG.GAME.HEIGHT,
-        backgroundColor: 0x202020,
+        backgroundColor: 0x222222,
         scene: [LoadScene, GameScene]
     });
 }
