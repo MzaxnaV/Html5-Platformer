@@ -1,20 +1,36 @@
 import { CFG } from '../cfg'
+import { Level } from '../level'
 
 export class LoadScene extends Phaser.Scene {
 
-    private level: number[][];
+    private levelData:integer[][]
 
     constructor() {
         super({
             key: CFG.SCENES.LOAD
         })
 
-        this.level = new Array(CFG.WORLD.HEIGHT).fill(0).map(() => new Array(CFG.WORLD.WIDTH).fill(0));
+        this.levelData = new Array(CFG.WORLD.HEIGHT).fill(0).map(() => new Array(CFG.WORLD.WIDTH).fill(0));
 
     }
 
     preload() {
-        //TODO: load data here :)
+        this.load.image('tiles', 'assets/drawtiles.png');
+
+        let loadingBar = this.add.graphics({
+            fillStyle: {
+                color:0xffffff
+            }
+        })
+
+        this.load.on("progress", (percent:number) => {
+            loadingBar.fillRect(0, this.game.renderer.height / 2, this.game.renderer.width * percent, 60);
+            console.log(percent);
+        })
+
+        this.load.on("complete", () => {
+            console.log("done");
+        })
     }
 
     create() {
@@ -26,15 +42,16 @@ export class LoadScene extends Phaser.Scene {
         let x = randInt(CFG.WORLD.WIDTH);
         let y = randInt(CFG.WORLD.HEIGHT);
 
-        // choose a random row and random colunn
-        this.level[y].fill(1);
+        // fill row with 1
+        this.levelData[y].fill(1);
 
-        for (let j = 0; j < CFG.WORLD.HEIGHT; j++) {
-            this.level[j][x] = 1;
+        //fill column with 1
+        for (let j = 0; j < this.levelData.length; j++) {
+            this.levelData[j][x] = 1;
         }
 
         // @ts-ignore
-        this.scene.start(CFG.SCENES.GAME, this.level);
+        this.scene.start(CFG.SCENES.GAME, this.level.data);
     }
 
     update() {
