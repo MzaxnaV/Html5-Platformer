@@ -8,8 +8,8 @@ export const CFG = {
         HEIGHT: 768
     },
     WORLD: {
-        WIDTH: Math.floor(1280/32),
-        HEIGHT: Math.floor(768/32)
+        WIDTH: Math.floor(1280 / 32),
+        HEIGHT: Math.floor(768 / 32)
     },
     SCENES: {
         LOAD: "load",
