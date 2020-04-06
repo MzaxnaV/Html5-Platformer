@@ -8,9 +8,9 @@ window.onload = () => {
         title: CFG.GAME.TITLE,
         type: Phaser.AUTO,
         version: CFG.GAME.VERSION,
-        // render: {
-        //     pixelArt: true,
-        // },
+        render: {
+            pixelArt: true,
+        },
         scale: {
             // mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH
