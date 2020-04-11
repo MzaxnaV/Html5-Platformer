@@ -1,14 +1,22 @@
 import { CFG } from '../cfg'
+import { Vector } from 'matter';
 
 class Room {
 	public size = { w: CFG.WORLD.ROOM_MIN_SIZE.x, h: CFG.WORLD.ROOM_MIN_SIZE.y };
 	public pos = { x: CFG.WORLD.ROOM_OFFSET, y: CFG.WORLD.ROOM_OFFSET };
+
+	public door = { top: [-1, -1], bottom: [-1, -1], right: [-1, -1], left: [-1, -1] };
 
 	constructor(w: integer, h: integer) { // remove this
 		this.size.w = CFG.randInt(this.size.w, w - 2 * CFG.WORLD.ROOM_OFFSET);
 		this.size.h = CFG.randInt(this.size.h, h - 2 * CFG.WORLD.ROOM_OFFSET);
 		this.pos.x = CFG.randInt(this.pos.x, w - 2 * CFG.WORLD.ROOM_OFFSET - this.size.w);
 		this.pos.y = CFG.randInt(this.pos.y, h - 2 * CFG.WORLD.ROOM_OFFSET - this.size.h);
+		this.door.top = [CFG.randInt(0, this.size.w - 1), -1];
+		this.door.bottom = [CFG.randInt(0, this.size.w - 1), this.size.h];
+		this.door.left = [-1, CFG.randInt(0, this.size.h-1)];
+		this.door.right = [this.size.w , CFG.randInt(0, this.size.h-1)];
+
 	}
 }
 
@@ -22,7 +30,7 @@ export class LoadScene extends Phaser.Scene {
 			key: CFG.SCENES.LOAD
 		})
 
-		this.levelData = new Array(CFG.WORLD.HEIGHT).fill(0).map(() => new Array(CFG.WORLD.WIDTH).fill(0));
+		this.levelData = new Array(CFG.WORLD.HEIGHT).fill(1).map(() => new Array(CFG.WORLD.WIDTH).fill(1));
 		this.level = this.createLevel();
 	}
 
@@ -57,12 +65,19 @@ export class LoadScene extends Phaser.Scene {
 
 		// define sublevel,
 		let sublevel = {
-			size: { x: 16, y : 16 }, //remove from here
+			size: { x: 16, y: 16 }, //remove from here
 			get w() { return Math.floor(CFG.WORLD.HEIGHT / this.size.x); },
 			get h() { return Math.floor(CFG.WORLD.WIDTH / this.size.y); },
 		}
 
-		let level = new Array<Room>(sublevel.w).fill(new Room(sublevel.size.x, sublevel.size.y)).map(() => new Array<Room>(sublevel.h).fill(new Room(sublevel.size.x, sublevel.size.y)));
+		let level: Room[][] = [];
+
+		for (let i = 0; i < sublevel.w; i++) {
+			level[i] = [];
+			for (let j = 0; j < sublevel.h; j++) {
+				level[i][j] = new Room(sublevel.size.x, sublevel.size.y);
+			}
+		}
 
 		return level;
 	}
@@ -71,28 +86,20 @@ export class LoadScene extends Phaser.Scene {
 
 		for (let j = 0; j < this.level.length; j++) {
 			for (let i = 0; i < this.level[j].length; i++) {
-				let indices = this.makeRect(this.level[j][i]);
-				indices.forEach( (indice: [number, number]) => {
-					this.levelData[indice[0] + 16 * j][indice[1] + 16 * i] = 1;
-				})
+				let room: Room = this.level[j][i];
+
+				for (let x = 0; x < room.size.w; x++) {
+					for (let y = 0; y < room.size.h; y++) {
+						this.levelData[room.pos.y + y + j * 16][room.pos.x + x + i * 16] = 0;
+					}
+				}
+
+				this.levelData[room.door.top[1] + room.pos.y + j * 16][room.door.top[0] + room.pos.x + i * 16] = 2;
+				this.levelData[room.door.bottom[1] + room.pos.y + j * 16][room.door.bottom[0] + room.pos.x + i * 16] = 2;
+				this.levelData[room.door.left[1] + room.pos.y + j * 16][room.door.left[0] + room.pos.x + i * 16] = 2;
+				this.levelData[room.door.right[1] + room.pos.y + j * 16][room.door.right[0] + room.pos.x + i * 16] = 2;
 			}
 		}
-	}
-
-	private makeRect(room: Room) {
-		let wallIndices: [number, number][] = [];
-
-			for (let i = 0; i <= room.size.w; i++) {
-				wallIndices.push([room.pos.x + i, room.pos.y]);
-				wallIndices.push([room.pos.x + i, room.size.h + room.pos.y]);
-			}
-
-			for (let j = 0; j <= room.size.h; j++) {
-				wallIndices.push([room.pos.x, room.pos.y + j]);
-				wallIndices.push([room.pos.x + room.size.w, room.pos.y + j]);
-			}
-
-			return wallIndices;
 	}
 
 	private createDivision(x0: integer, y0: integer, x1: integer, y1: integer, levelData: integer[][], val: integer) {

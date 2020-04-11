@@ -1,8 +1,6 @@
-import { version } from "../package.json"
-
 export const CFG = {
     GAME: {
-        VERSION: version,
+        VERSION: "0.0.1",
         TITLE: "Platformer",
         WIDTH: 1280,
         HEIGHT: 768
