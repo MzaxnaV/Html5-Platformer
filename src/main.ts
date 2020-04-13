@@ -11,6 +11,12 @@ window.onload = () => {
         render: {
             pixelArt: true,
         },
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 980 }
+            }
+        },
         scale: {
             // mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH
