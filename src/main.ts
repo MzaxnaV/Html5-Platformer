@@ -10,6 +10,7 @@ window.onload = () => {
         version: CFG.GAME.VERSION,
         render: {
             pixelArt: true,
+            roundPixels: true
         },
         physics: {
             default: 'arcade',
@@ -18,7 +19,7 @@ window.onload = () => {
             }
         },
         scale: {
-            // mode: Phaser.Scale.FIT,
+            mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH
         },
         width: CFG.GAME.WIDTH,

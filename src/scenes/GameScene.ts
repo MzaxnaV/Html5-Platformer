@@ -10,8 +10,6 @@ export class GameScene extends Phaser.Scene {
         super({
             key: CFG.SCENES.GAME
         })
-
-        
     }
 
     init(data: integer[][]) {
@@ -27,28 +25,32 @@ export class GameScene extends Phaser.Scene {
         let tiles = map.addTilesetImage('tiles');
         let layer = map.createStaticLayer(0, tiles, 0, 0);
 
-        map.setCollision(1);
+        map.setCollision([CFG.TILE.BLOCK, CFG.TILE.B]);
 
-        let tile = map.findByIndex(0);
-        console.log(tile);
+        let tile = map.findByIndex(CFG.TILE.EMPTY);
+
         this.player = this.physics.add.sprite(tile.x * tileSize, tile.y * tileSize, 'player');
-        this.player.setOrigin(0).setScale(0.8, 0.8);
-        console.log('player', this.player);
+        this.player.setOrigin(0).setScale(0.6, 0.8);
+
         this.physics.add.collider(this.player, layer);
 
-        
+        // this.cameras.main.startFollow(this.player, true, 0.9, 0.9);
+
+        // this.cameras.main.setZoom(10);
     }
 
     update() {
-    // Horizontal movement
+        // Horizontal movement
         this.player.setVelocityX(0);
 
         if (this.cursors.left?.isDown) {
-            this.player.setVelocityX(-100);
+            this.player.setVelocityX(-50);
         }
         else if (this.cursors.right?.isDown) {
-            this.player.setVelocityX(100);
+            this.player.setVelocityX(50);
         }
+
+        // vertical movement
         if (this.cursors.up?.isDown)
         {
             this.player.setVelocityY(-100);
