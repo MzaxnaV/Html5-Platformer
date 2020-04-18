@@ -35,8 +35,8 @@ export class LoadScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('tiles', 'assets/drawtiles.png');
-		this.load.image('player', 'assets/player.png');
+		this.load.image('tiles', 'assets/tiles.png');
+		this.load.image('player', 'assets/player.png')
 
 		let loadingBar = this.add.graphics({
 			fillStyle: {

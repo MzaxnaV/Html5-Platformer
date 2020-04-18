@@ -25,18 +25,18 @@ export class GameScene extends Phaser.Scene {
         let tiles = map.addTilesetImage('tiles');
         let layer = map.createStaticLayer(0, tiles, 0, 0);
 
-        map.setCollision([CFG.TILE.BLOCK, CFG.TILE.B]);
+        map.setCollision([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
 
         let tile = map.findByIndex(CFG.TILE.EMPTY);
 
         this.player = this.physics.add.sprite(tile.x * tileSize, tile.y * tileSize, 'player');
-        this.player.setOrigin(0).setScale(0.6, 0.8);
+        this.player.setOrigin(0);
 
         this.physics.add.collider(this.player, layer);
 
-        // this.cameras.main.startFollow(this.player, true, 0.9, 0.9);
-
-        // this.cameras.main.setZoom(10);
+        this.cameras.main.setBounds(0, 0, CFG.GAME.WIDTH, CFG.GAME.HEIGHT);
+        this.cameras.main.startFollow(this.player, true, 0.9, 0.9);
+        this.cameras.main.setZoom(10);
     }
 
     update() {
@@ -44,10 +44,12 @@ export class GameScene extends Phaser.Scene {
         this.player.setVelocityX(0);
 
         if (this.cursors.left?.isDown) {
-            this.player.setVelocityX(-50);
+            this.player.setVelocityX(-25);
+            this.player.flipX = true;
         }
         else if (this.cursors.right?.isDown) {
-            this.player.setVelocityX(50);
+            this.player.setVelocityX(25);
+            this.player.flipX = false;
         }
 
         // vertical movement

@@ -24,7 +24,7 @@ window.onload = () => {
         },
         width: CFG.GAME.WIDTH,
         height: CFG.GAME.HEIGHT,
-        backgroundColor: 0x222222,
+        backgroundColor: 0x21263f,
         scene: [LoadScene, GameScene]
     });
 }
